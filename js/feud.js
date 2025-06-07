@@ -8,7 +8,6 @@ var xAudio;
 var buzzerAudio;
 var correctAudio;
 
-
 $(document).ready(function() {
     console.log(json);
     //open_websocket();
@@ -16,19 +15,23 @@ $(document).ready(function() {
     initAudio();
 
     $(".xContainer").hide();
-    $("body").click(function(){
+    $(".next").click(function(){
         nextQuestion();
     });
+
+	$(".answer").click(function() {
+		showAnswer($(this).attr('val'));
+	});
+	
+	$(".wrong").click(function() {
+		wrongAnswer();
+	})
 
     $("body").bind('keypress', function(e) {
         // spacebar = wrong answer
         console.log(e.keyCode);
         if(e.keyCode == 32) {
-            numWrong = (numWrong + 1)%4;
-            if(numWrong == 0) numWrong = 1;
-            xAudio.play();
-            $(".xContainer").find("img").attr("src", "assets/" + numWrong + "x.png");
-            $(".xContainer").show(0).delay(1200).hide(0);
+            wrongAnswer();
         }
 
         // 1-8 = reveal answer
@@ -47,6 +50,14 @@ $(document).ready(function() {
     });
 
 });
+
+function wrongAnswer() {
+	numWrong = (numWrong + 1)%4;
+	if(numWrong == 0) numWrong = 1;
+	xAudio.play();
+	$(".xContainer").find("img").attr("src", "assets/" + numWrong + "x.png");
+	$(".xContainer").show(0).delay(1200).hide(0);
+}
 
 function initAudio() {
     xAudio = document.createElement('audio');
